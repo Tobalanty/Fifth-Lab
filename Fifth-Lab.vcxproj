@@ -141,6 +141,9 @@
   <ItemGroup>
     <ClCompile Include="Fifth-Lab.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="cinClear.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
