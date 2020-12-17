@@ -315,7 +315,7 @@
 /* Задана матрица размером NxM. Определить количество «особых» элементов матрицы, 
 считая элемент «особым», если в строке слева от него находятся элементы, меньшие его, 
 а справа – большие*/
-int main() {
+/*int main() {
 
 	int n;								//Ввод количества строк			
 	while (true) {
@@ -359,18 +359,230 @@ int main() {
 		}
 		std::cout << std::endl;
 	}
+
+	bool leftside, rightside;
+	int k{ 0 };
+
+	for (int i = 0; i < n; ++i) {								//Циклы для итераций по массиву(проходимся по всем строкам, не затрагивая крайние элементы)
+		for (int j = 1; j < (m - 1); ++j) {
+
+			for (int left = 0; left < j; ++left) {				//Проверяем элементы слева от текущего
+				if (array[i][j] <= array[i][left]) {
+					leftside = false;
+					break;
+				}
+				leftside = true;
+			}
+
+			for (int right = j+1; right < m; ++right) {			//Проверяем элементы справа от текущего
+				if (array[i][j] >= array[i][right]) {
+					rightside = false;
+					break;
+				}
+				rightside = true;
+			}
+
+			if (leftside & rightside) {						//Если результат обеих проверок положительный, то увеличиваем счётчик на 1
+				++k;
+			}
+		}
+	}
 	
+	std::cout << "There are " << k << " 'special' elements in your matrix.\n";
+
+	for (int i = 0; i < n; ++i) {			//Освобождение памяти
+		delete[]array[i];
+	}
+	delete[]array;
+
 	system("pause");
 	return 0;
-}
+}*/
 /*6 Вариант*/
 /*Задана символьная матрица размером NxM.
 Определить количество различных элементов матрицы (т.е. повторяющиеся элементы считать один раз)*/
+/*int main() {
 
+
+	int n;								//Ввод количества строк			
+	while (true) {
+		std::cout << "Input N: ";
+		std::cin >> n;
+		if (cinClear()) {				//Проверка ввода
+			break;
+		}
+	}
+
+	int m;								//Ввод количества столбцов
+	while (true) {
+		std::cout << "Input M: ";
+		std::cin >> m;
+		if (cinClear()) {
+			break;
+		}
+	}
+
+	char** array = new char* [n];			//Объявление двумерного динамического массива 
+	for (int i = 0; i < n; ++i) {
+		array[i] = new char[m];
+	}
+
+	std::cout << "Fill the matrix with integers: \n";	//Заполнение полученной матрицы значениями введёнными пользователем
+	for (int i = 0; i < n; ++i) {
+		for (int j = 0; j < m; ++j) {
+			while (true) {
+				std::cin >> array[i][j];
+				if (cinClear()) {
+					break;
+				}
+			}
+		}
+	}
+
+	std::cout << "Your matrix is: \n";				//Вывод исходной матрицы в понятном виде
+	for (int i = 0; i < n; ++i) {
+		for (int j = 0; j < m; ++j) {
+			std::cout << array[i][j] << " ";
+		}
+		std::cout << std::endl;
+	}
+
+	int specialQuantity{ 0 };					//Хранит количество различных элементов
+
+	for (int i = 0; i < n; ++i) {				//Для итерации по матрице
+		for (int j = 0; j < m; ++j) {
+		
+			short k{ 0 };									//Переменная для хранения количества повторений 
+			bool notSpecial{false};						//Переменная для проверки на "особенность"
+
+			for (int ii = 0; ii < n; ++ii) {			//Для сравнения с каждым элементом матрицы
+				for (int jj = 0; jj < m; ++jj) {
+
+					if (array[i][j] == array[ii][jj]) {				//Сравниваем текущий элемент со всеми элементами матрицы (включая себя)
+						++k;
+					}
+					if ((k >= 2) & (ii <= i) & (jj <= j)) {			//Если такой же элемент найден до текущего, не считаем его
+						notSpecial = true;
+						break;
+					}
+					else if (k >= 2) {								//Если такой же элемент найден после текущего, считаем его
+						++specialQuantity;
+						notSpecial = true;
+						break;
+					}
+				}
+				if (notSpecial) {									//Если был найден такой же элемент, переходим к следующему элементу
+					break;
+				}
+			}
+			if (!notSpecial) {										//Если такой же элемент не найден, увеличиваем счётчик
+				++specialQuantity;
+			}
+		}
+	}
+
+	for (int i = 0; i < n; ++i) {			//Освобождение памяти
+		delete[]array[i];
+	}
+	delete[]array;
+
+	std::cout << "There are " << specialQuantity << " 'special' elements in your matrix.\n";
+
+	system("pause");
+	return 0;
+}*/
 /*7 Вариант*/
 /*Дана матрица размером NxM. Упорядочить ее строки по возрастанию их
 первых элементов*/
+/*int main() {
 
+	int n;								//Ввод количества строк			
+	while (true) {
+		std::cout << "Input N: ";
+		std::cin >> n;
+		if (cinClear()) {				//Проверка ввода
+			break;
+		}
+	}
+
+	int m;								//Ввод количества столбцов
+	while (true) {
+		std::cout << "Input M: ";
+		std::cin >> m;
+		if (cinClear()) {
+			break;
+		}
+	}
+
+	int** array = new int* [n];			//Объявление двумерного динамического массива 
+	for (int i = 0; i < n; ++i) {
+		array[i] = new int[m];
+	}
+
+	std::cout << "Fill the matrix with integers: \n";	//Заполнение полученной матрицы значениями введёнными пользователем
+	for (int i = 0; i < n; ++i) {
+		for (int j = 0; j < m; ++j) {
+			while (true) {
+				std::cin >> array[i][j];
+				if (cinClear()) {
+					break;
+				}
+			}
+		}
+	}
+
+	std::cout << "Your matrix is: \n";				//Вывод исходной матрицы в понятном виде
+	for (int i = 0; i < n; ++i) {
+		for (int j = 0; j < m; ++j) {
+			std::cout << array[i][j] << " ";
+		}
+		std::cout << std::endl;
+	}
+
+	//Использую сортировку пузырьком
+	for (int k = 0; k < n; ++k) {
+
+		bool earlyComplete{ true };					//Переменная, для выхода из цикла, при преждевременном завершении сортировки
+
+		for (int i{ 0 }; i < (n - 1); ++i) {
+			if (array[i + 1][0] < array[i][0]) {
+
+				earlyComplete = false;
+
+				int temp;
+				for (int j = 0; j < m; ++j) {	
+
+					temp = array[i][j];
+					array[i][j] = array[i+1][j];
+					array[i + 1][j] = temp;
+
+				}
+
+			}
+
+		}
+		if (earlyComplete) {
+			break;
+		}
+	}
+	
+
+	std::cout << "Matrix ordered according to the condition: \n";			//Вывод отсортированной согласно условию матрицы
+	for (int i = 0; i < n; ++i) {
+		for (int j = 0; j < m; ++j) {
+			std::cout << array[i][j] << " ";
+		}
+		std::cout << std::endl;
+	}
+
+	for (int i = 0; i < n; ++i) {			//Освобождение памяти
+		delete[]array[i];
+	}
+	delete[]array;
+
+	system("pause");
+	return 0;
+}*/
 /*8 Вариант*/
 /*Дана матрица размером NxM. Упорядочить ее строки по возрастанию
 суммы их элементов*/
