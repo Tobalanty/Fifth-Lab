@@ -586,15 +586,271 @@
 /*8 Вариант*/
 /*Дана матрица размером NxM. Упорядочить ее строки по возрастанию
 суммы их элементов*/
+/*int main() {
 
+	int n;								//Ввод количества строк
+	while (true) {
+		std::cout << "Input N: ";
+		std::cin >> n;
+		if (cinClear()) {	//Проверка ввода
+			break;
+		}
+	}
+
+	int m;								//Ввод количества столбцов
+	while (true) {
+		std::cout << "Input M: ";
+		std::cin >> m;
+		if (cinClear()) {
+			break;
+		}
+	}
+
+	int** array = new int* [n];		//Объявление двумерного динамического массива
+	for (int i = 0; i < n; ++i) {
+		array[i] = new int[m];
+	}
+
+	std::cout << "Fill the matrix with integers: ";		//Заполнение матрицы с клавиатуры
+	for (int i = 0; i < n; ++i) {
+		for (int j = 0; j < m; ++j) {
+			while (true) {
+				std::cin >> array[i][j];
+				if (cinClear()) {
+					break;
+				}
+			}
+		}
+	}
+
+	std::cout << "Your matrix is: ";			//Вывод матрицы в понятном виде
+	for (int i = 0; i < n; ++i) {
+		for (int j = 0; j < m; ++j) {
+			std::cout << array[i][j] << " ";
+		}
+		std::cout << std::endl;
+	}
+
+	int* sum = new int[n]{};			//Объявление динамического массива, содержащего суммы строк матрицы
+
+	for (int i = 0; i < n; ++i) {
+		for (int j = 0; j < m; ++j) {
+			sum[i] += array[i][j];
+		}
+	}
+
+	//сортировка пузырьком
+	int temp;
+	for (int k = 0; k < n; ++k) {
+
+		bool earlyComplete{ true };					//Переменная, для проверки на преждевременное завершение сортировки
+
+		for (int i = 0; i < (n - 1); ++i) {
+
+			if (sum[i] > sum[i + 1]) {
+
+				temp = sum[i];
+				sum[i] = sum[i + 1];
+				sum[i + 1] = temp;
+
+				for (int j = 0; j < m; ++j) {
+					temp = array[i][j];
+					array[i][j] = array[i + 1][j];
+					array[i + 1][j] = temp;
+					earlyComplete = false;
+				}
+			}
+		}
+		if (earlyComplete) {
+			break;
+		}
+	}
+
+	std::cout << "Matrix ordered according to the condition: \n";			//Вывод отсортированной согласно условию матрицы
+	for (int i = 0; i < n; ++i) {
+		for (int j = 0; j < m; ++j) {
+			std::cout << array[i][j] << " ";
+		}
+		std::cout<<std::endl;
+	}
+
+	for (int i = 0; i < n; ++i) {		//Освобождение памяти
+		delete[]array[i];
+	}
+	delete[]array;
+	delete[]sum;
+	
+
+	system("pause");
+	return 0;
+}*/
 /*9 Вариант*/
 /*Дана матрица размером NxM. Упорядочить ее столбцы по возрастанию
 их наименьших элементов*/
+/*int main() {
 
+	int n;								//Ввод количества строк
+	while (true) {
+		std::cout << "Input N: ";
+		std::cin >> n;
+		if (cinClear()) {	//Проверка ввода
+			break;
+		}
+	}
+
+	int m;								//Ввод количества столбцов
+	while (true) {
+		std::cout << "Input M: ";
+		std::cin >> m;
+		if (cinClear()) {
+			break;
+		}
+	}
+
+	int** array = new int* [n];		//Объявление двумерного динамического массива
+	for (int i = 0; i < n; ++i) {
+		array[i] = new int[m];
+	}
+
+	std::cout << "Fill the matrix with integers: ";		//Заполнение матрицы с клавиатуры
+	for (int i = 0; i < n; ++i) {
+		for (int j = 0; j < m; ++j) {
+			while (true) {
+				std::cin >> array[i][j];
+				if (cinClear()) {
+					break;
+				}
+			}
+		}
+	}
+
+	std::cout << "Your matrix is: ";			//Вывод матрицы в понятном виде
+	for (int i = 0; i < n; ++i) {
+		for (int j = 0; j < m; ++j) {
+			std::cout << array[i][j] << " ";
+		}
+		std::cout << std::endl;
+	}
+
+	int* smallestElements = new int[m];				//Динамический массив, который будет содержать мминимальные элементы каждого столбца матрицы
+
+	for (int j = 0; j < m; ++j) {					//Записываем первые элементы каждого столбца матрицы в этот массив
+		smallestElements[j] = array[0][j];
+	}
+
+	for (int j = 0; j < m; ++j) {					//Находим наименьшие элементы в каждом столбце и перезаписываем массив smallestElements при необходимости
+		for (int i = 0; i < n; ++i) {
+			if (array[i][j] < smallestElements[j]) {
+				smallestElements[j] = array[i][j];
+			}
+		}
+	}
+
+	//сортировка пузырьком
+	int temp;								//Временная переменная для свапа
+	for (int k = 0; k < m; ++k) {
+
+		bool earlyComplete{ true };						//Переменная для выхода из цикла при преждевременном окончании сортировки
+		for (int j = 0; j < (m - 1); ++j) {
+
+			if (smallestElements[j] > smallestElements[j + 1]) {
+			
+				temp = smallestElements[j];							//сортируем smalestElements
+				smallestElements[j] = smallestElements[j + 1];
+				smallestElements[j + 1] = temp;
+
+				for (int i = 0; i < n; ++i) {						//и матрицы array соответственно
+					temp = array[i][j];
+					array[i][j] = array[i][j + 1];
+					array[i][j + 1] = temp;
+					earlyComplete = false;
+				}
+			}
+		}
+		if (earlyComplete) {									//Завершаем цикл, если попалась "холостая" итерация
+			break;
+		}
+	}
+
+	std::cout << "Matrix ordered according to the condition: \n";			//Вывод отсортированной согласно условию матрицы
+	for (int i = 0; i < n; ++i) {
+		for (int j = 0; j < m; ++j) {
+			std::cout << array[i][j] << " ";
+		}
+		std::cout << std::endl;
+	}
+
+	for (int i = 0; i < n; ++i) {		//Освобождение памяти
+		delete[]array[i];
+	}
+	delete[]array;
+	delete[]smallestElements;
+	
+
+	system("pause");
+	return 0;
+}*/
 /*10 Вариант*/
 /*Определить, является ли заданная квадратная матрица n-го порядка
 симметричной относительно побочной диагонали*/
+/*int main() {
 
+	int n;								//Ввод размерности матрицы
+	while (true) {
+		std::cout << "Input N: ";
+		std::cin >> n;
+		if (cinClear()) {	//Проверка ввода
+			break;
+		}
+	}
+
+	int** array = new int* [n];		//Объявление двумерного динамического массива
+	for (int i = 0; i < n; ++i) {
+		array[i] = new int[n];
+	}
+
+	std::cout << "Fill the matrix with integers: ";		//Заполнение матрицы с клавиатуры
+	for (int i = 0; i < n; ++i) {
+		for (int j = 0; j < n; ++j) {
+			while (true) {
+				std::cin >> array[i][j];
+				if (cinClear()) {
+					break;
+				}
+			}
+		}
+	}
+
+	std::cout << "Your matrix is: \n";			//Вывод матрицы в понятном виде
+	for (int i = 0; i < n; ++i) {
+		for (int j = 0; j < n; ++j) {
+			std::cout << array[i][j] << " ";
+		}
+		std::cout << std::endl;
+	}
+	
+	bool symmetric{ true };										//Переменная для выхода из циклов, если будут найдены не симметричные элементы
+	for (int i = 0; i < n; ++i) {
+		for (int j = 0; j < n; ++j) {
+			if (array[i][j] != array[n - 1 - i][n - 1 - j]) {			//Проверка на симметричность
+				symmetric = false;
+				break;
+			}
+		}
+		if (!symmetric) {
+			break;
+		}
+	}
+
+	if (symmetric) {
+		std::cout << "Your matrix is symmetric with respect to the side diagonal.\n";
+	}
+	else
+		std::cout << "Your matrix is NOT symmetric with respect to the side diagonal.\n";
+
+	system("pause");
+	return 0;
+}*/
 /*11 Вариант*/
 /*Для матрицы размером NxM вывести на экран все седловые точки.
 Элемент матрицы называется седловой точкой, если он является наименьшим в

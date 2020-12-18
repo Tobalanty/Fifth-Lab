@@ -1,4 +1,3 @@
-#include <iostream>
 #ifndef CINCLEAR
 #define CINCLEAR
 
