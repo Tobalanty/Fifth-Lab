@@ -855,7 +855,163 @@
 /*Для матрицы размером NxM вывести на экран все седловые точки.
 Элемент матрицы называется седловой точкой, если он является наименьшим в
 своей строке и одновременно наибольшим в своем столбце или наоборот*/
+/*int main() {
+	
+	int n;										//Ввод количества строк
+	while (true) {
+		std::cout << "Input N: ";
+		std::cin >> n;
+		if (cinClear()) {
+			break;
+		}
+	}
 
+	int m;
+	while (true) {							//Ввод количества столбцов
+		std::cout << "Input M: ";
+		std::cin >> m;
+		if (cinClear()) {
+			break;
+		}
+	}
+
+	int** array = new int* [n];				//Объявление двумерного ддинамического массива
+	for (int i = 0; i < n; ++i) {
+		array[i] = new int[m];
+	}
+
+	std::cout << "Fill the matrix with integer: \n";						//Заполнение матрицы с клавиатуры
+	for (int i = 0; i < n; ++i) {
+		for (int j = 0; j < m; ++j) {
+			while (true) {
+				std::cout << "Element " << "[" << i + 1 << ", " << j + 1 << "]: ";
+				std::cin >> array[i][j];
+				if (cinClear()) {
+					break;
+				}
+			}
+		}
+	}
+
+	for (int i = 0; i < n; ++i) {					//Вывод матрицы в понятном виде
+		for (int j = 0; j < m; ++j) {
+			std::cout << array[i][j] << "  ";
+		}
+		std::cout << std::endl;
+	}
+
+	int count{ 0 };
+
+	for (int i = 0; i < n; ++i) {								//Поиск седдловых точек (min в строке/max в столбце)
+
+		int temp{ array[i][0] };
+		bool* temp_j = new bool[m] {};
+		int tempJ{ 0 };
+
+		for (int j = 1; j < m; ++j) {					//Находим минимальный элемент в строке
+			if (array[i][j] < temp) {
+				temp = array[i][j];
+				tempJ = j;								//Записываем координату j этого элемента во временную переменную
+			}
+		}
+
+		for (int j = tempJ; j < m; ++j) {				//Ищем в строке такие же элементы
+			if (temp == array[i][j]) {						
+				temp_j[j] = 1;							//Запоминаем координаты минимальных элементов этой строки 
+			}											//(записываю true в соответствующие элементы временного массива)
+		}
+
+		for (int j = 0; j < m; ++j) {
+			
+			bool notSaddle{ false };				//Переменная для выхода из цикла, если не соблюдается условие седловой точки
+			if (temp_j[j] != 0) {					//Идём по тем столбцам, координаты которых находятся в temp_j
+				for (int ii = 0; ii < n; ++ii) {
+					if (temp < array[ii][j]) {
+						notSaddle = true;
+						break;
+					}
+				}
+				if (!notSaddle) {					//Если в столбце не был найден элемент, больший текущего, то выводим его на экран
+					std::cout << "Element [" << i + 1 << ", " << j + 1 << "] = "
+							  << temp << " is saddle point.\n";
+					++count;						//Увеличиваем счётчик, хранящий количество седловых точек
+				}
+			}
+		}
+
+		delete[]temp_j;				//Освобождение памяти
+
+	}
+
+	for (int j = 0; j < m; ++j) {								//Поиск седдловых точек (max в строке/min в столбце)
+
+		int temp{ array[0][j] };
+		bool* temp_i = new bool[n] {};
+		int tempI{ 0 };
+
+		for (int i = 1; i < n; ++i) {		//Находим минимальный элемент в столбце
+			if (array[i][j] < temp) {
+				temp = array[i][j];
+				tempI = i;					//Записываем координату i этого элемента во временную переменную
+			}
+		}
+
+		for (int i = tempI; i < n; ++i) {	//Находим такие же элементы в столбце
+			if (temp == array[i][j]) {
+				temp_i[i] = 1;				//Запоминаем координаты минимальных элементов этого столбца
+			}
+		}
+
+			for (int i = 0; i < n; ++i) {		//Чтобы седловая точка, находящаяся на пересечении строки и столбца с одинаковыми элементамм,
+				if (!temp_i[i]) {					//не считалась программой второй раз, удаляем её из списка обрабатываемых точек
+					break;
+				}
+			}
+			for (int i = 0; i < n; ++i) {
+
+				bool same_same{ true };
+				for (int jj = 0; jj < m - 1; ++jj) {
+					if (array[i][jj]!=array[i][jj+1]) {
+						same_same = false;					
+						break;
+					}
+				}
+				if (same_same) {
+					temp_i[i] = 0;
+				}
+			}
+		
+
+		for (int i = 0; i < n; ++i) {
+
+			bool notSaddle{ false };			//Переменная для выхода из цикла, если не соблюдается условие седловой точки
+			if (temp_i[i] != 0) {				//Идём по строкам, координаты которых записаеы в temp_i
+				for (int jj = 0; jj < m; ++jj) {
+					if (temp < array[i][jj]) {
+						notSaddle = true;
+						break;
+					}
+				}
+				if (!notSaddle) {		//Если в строке не был найден элемент, больший текущего, то выводим его на экран
+					std::cout << "Element [" << i + 1 << ", " << j + 1 << "] = "
+						<< temp << " is saddle point.\n";
+					++count;			//Увеличиваем счётчик, хранящий количество седловых точек
+				}
+			}
+		}
+		delete[]temp_i;			//Освобождение памяти
+	}
+
+	for (int i = 0; i < n; ++i) {	//Освобождение памяти
+		delete[]array[i];
+	}
+	delete[]array;
+
+	std::cout << "There are " << count << " saddle point's in this matrix.\n";
+
+	system("pause");
+	return 0;
+}*/
 /*12 Вариант*/
 /*В матрице размером NxM переставить строки так, чтобы на главной
 диагонали матрицы были расположены элементы, наибольшие по абсолютной
