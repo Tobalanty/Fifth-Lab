@@ -1016,18 +1016,358 @@
 /*В матрице размером NxM переставить строки так, чтобы на главной
 диагонали матрицы были расположены элементы, наибольшие по абсолютной
 величине*/
+/*int main() {
 
+	int n;								//Ввод количества строк
+	while (true) {
+		std::cout << "Input N: ";
+		std::cin >> n;
+		if (cinClear()) {
+			break;
+		}
+	}
+
+	int m;							//Ввод количества столбцов
+	while (true) {
+		std::cout << "Input M: ";
+		std::cin >> m;
+		if (cinClear()) {
+			break;
+		}
+	}
+
+	int** array = new int* [n];			//Объявление двумерного динамического массива
+	for (int i = 0; i < n; ++i) {
+		array[i] = new int[m];
+	}
+
+	std::cout << "Fill the matrix wight integer: \n";			//Заполнение массива с клавиатуры
+	for (int i = 0; i < n; ++i) {
+		for (int j = 0; j < m; ++j) {
+
+			while (true) {
+				std::cout << "Element [" << i + 1 << ", " << j + 1 << "]: ";
+				std::cin >> array[i][j];
+				if (cinClear()) {
+					break;
+				}
+
+			}
+		}
+	}
+
+	for (int i = 0; i < n; ++i) {				//Вывод исходного массива
+		for (int j = 0; j < m; ++j) {
+			std::cout << array[i][j] << "   ";
+		}
+		std::cout << std::endl;
+	}
+
+	for (int k = 0; k < n; ++k) {						//Сортируем строки
+
+		bool complete{ true };		//Для выхода, если сортировка закончилась до прогона n раз
+		for (int i = 0; i < n; ++i) {
+
+			int max = array[i][0], temp_j = 0, temp;
+			for (int j = 1; j < m; ++j) {				//Ищу максимальный по модулю элемент в строке
+				if (abs(max) < abs(array[i][j])) {
+					max = array[i][j];
+					temp_j = j;
+				}
+			}
+
+			if (temp_j != i) {						//Перемещаю строку с этим элементом на ту строку, номер которой равен номеру столбца этого элемента
+				for (int j = 0; j < m; ++j) {
+					temp = array[i][j];
+					array[i][j] = array[temp_j][j];
+					array[temp_j][j] = temp;
+					complete = false;
+				}
+			}
+		}
+		if (complete) {			//Если за n итераций никакие строки не поменялись, то выходим из сортировки
+			break;
+		}
+	}
+
+	std::cout << "New matrix: \n";					//Вывод отсортированной матрицы
+	for (int i = 0; i < n; ++i) {
+		for (int j = 0; j < m; ++j) {
+			std::cout << array[i][j] << "   ";
+		}
+		std::cout << std::endl;
+	}
+	
+	for (int i = 0; i < n; ++i) {	//Освобождение памяти
+		delete[]array[i];
+	}
+	delete[]array;
+
+	system("pause");
+	return 0;
+}*/
 /*13 Вариант*/
 /*В матрице размером NxM найти максимальный среди элементов,
 лежащих ниже побочной диагонали, и минимальный среди элементов, лежащих
 выше главной диагонали*/
+/*int main() {
+	
+	int n;								//Ввод количества строк
+	while (true) {
+		std::cout << "Input N: ";
+		std::cin >> n;
+		if (cinClear()) {
+			break;
+		}
+	}
 
+	int m;								//Ввод количества столбцов
+	while (true) {
+		std::cout << "Input M: ";
+		std::cin >> m;
+		if (cinClear()) {
+			break;
+		}
+	}
+
+	int** array = new int* [n];				//Объявление двумерного динамического массива (матрицы)
+	for (int i = 0; i < n; ++i) {
+		array[i] = new int[m];
+	}
+
+	std::cout << "Fill the matrix with integer: \n";						//Заполнение матрицы с клавиатуры
+	for (int i = 0; i < n; ++i) {
+		for (int j = 0; j < m; ++j) {
+			std::cout << "Element [" << i + 1 << ", " << j + 1 << "]: ";
+			while (true) {
+				std::cin >> array[i][j];
+				if (cinClear()) {
+					break;
+				}
+			}
+		}
+	}
+
+	std::cout << "Your matrix: \n";					//Вывод матрицы в понятном виде
+	for (int i = 0; i < n; ++i) {
+		for (int j = 0; j < m; ++j) {
+			std::cout << array[i][j] << "  ";
+		}
+		std::cout << std::endl;
+	}
+	
+	int k = 1;
+	int temp{ array[0][1] };
+	for (int i = 0; i < n; ++i) {					//Поиск минимального среди элементов выше главной диагонали
+
+		for (int j = k; j < m; ++j) {
+			if (array[i][j] < temp) {
+				temp = array[i][j];
+			}
+		}
+		++k;
+		if (k >= m) {
+			break;
+		}
+	}
+	std::cout << "Minimum element among elements above the main diagonal: " << temp << std::endl;
+	
+	k = m - 1;
+	temp = array[1][m - 1];
+	for (int i = 1; i < n; ++i) {						//Поиск максимального среди элементов ниже побочной диагонали
+		for (int j = k; j < m; ++j) {
+			if (array[i][j] > temp) {
+				temp = array[i][j];
+			}
+		}
+		if (k > 0) {
+			--k;
+		}
+	}
+	std::cout << "Maximum element among elements below the secondary diagonal: " << temp << std::endl;
+	
+	for (int i = 0; i < n; ++i) {		//Освобождение памяти
+		delete[]array[i];
+	}
+	delete[]array;
+
+	system("pause");
+	return 0;
+}*/
 /*14 Вариант*/
 /*В матрице размером NxM поменять местами строку, 
-одержащую элемент с наибольшим значением, со строкой,
+cодержащую элемент с наибольшим значением, со строкой,
 содержащей элемент с наименьшим значением*/
+/*int main() {
 
+	int n;								//Ввод количества строк
+	while (true) {
+		std::cout << "Input N: ";
+		std::cin >> n;
+		if (cinClear()) {
+			break;
+		}
+	}
+
+	int m;								//Ввод количества столбцов
+	while (true) {
+		std::cout << "Input M: ";
+		std::cin >> m;
+		if (cinClear()) {
+			break;
+		}
+	}
+
+	int** array = new int* [n];				//Объявление двумерного динамического массива (матрицы)
+	for (int i = 0; i < n; ++i) {
+		array[i] = new int[m];
+	}
+
+	std::cout << "Fill the matrix with integer: \n";						//Заполнение матрицы с клавиатуры
+	for (int i = 0; i < n; ++i) {
+		for (int j = 0; j < m; ++j) {
+			std::cout << "Element [" << i + 1 << ", " << j + 1 << "]: ";
+			while (true) {
+				std::cin >> array[i][j];
+				if (cinClear()) {
+					break;
+				}
+			}
+		}
+	}
+
+	std::cout << "Your matrix: \n";					//Вывод матрицы в понятном виде
+	for (int i = 0; i < n; ++i) {
+		for (int j = 0; j < m; ++j) {
+			std::cout << array[i][j] << "  ";
+		}
+		std::cout << std::endl;
+	}
+
+	int min_i = 0, max_i = 0;
+	int temp_min = array[0][0], temp_max = array[0][0];
+	for (int i = 0; i < n; ++i) {					//Поиск максимального и минимального элементов и запоминание их строк
+		for (int j = 0; j < m; ++j) {
+			if (array[i][j] > temp_max) {
+				temp_max = array[i][j];
+				max_i = i;
+			}
+
+			if (array[i][j] < temp_min) {
+				temp_min = array[i][j];
+				min_i = i;
+			}
+		}
+	}
+
+	for (int j = 0; j < m; ++j) {			//Меняем строки местами
+		int temp{ array[min_i][j] };
+		array[min_i][j] = array[max_i][j];
+		array[max_i][j] = temp;
+	}
+
+	std::cout << "New matrix: \n";					//Вывод новой матрицы в понятном виде
+	for (int i = 0; i < n; ++i) {
+		for (int j = 0; j < m; ++j) {
+			std::cout << array[i][j] << "  ";
+		}
+		std::cout << std::endl;
+	}
+
+	for (int i = 0; i < n; ++i) {		//Освобождение памяти
+		delete[]array[i];
+	}
+	delete[]array;
+
+	system("pause");
+	return 0;
+}*/
 /*15 Вариант*/
 /*Из матрицы размером NxM получить матрицу размером (N–1) x (M–1)
 путем удаления из исходной матрицы строки и столбца, 
 на пересечении которых расположен элемент с наибольшим по модулю значением*/
+/*int main() {
+
+	int n;								//Ввод количества строк
+	while (true) {
+		std::cout << "Input N: ";
+		std::cin >> n;
+		if (cinClear()) {
+			break;
+		}
+	}
+
+	int m;								//Ввод количества столбцов
+	while (true) {
+		std::cout << "Input M: ";
+		std::cin >> m;
+		if (cinClear()) {
+			break;
+		}
+	}
+
+	int** array = new int* [n];				//Объявление двумерного динамического массива (матрицы)
+	for (int i = 0; i < n; ++i) {
+		array[i] = new int[m];
+	}
+
+	std::cout << "Fill the matrix with integer: \n";						//Заполнение матрицы с клавиатуры
+	for (int i = 0; i < n; ++i) {
+		for (int j = 0; j < m; ++j) {
+			std::cout << "Element [" << i + 1 << ", " << j + 1 << "]: ";
+			while (true) {
+				std::cin >> array[i][j];
+				if (cinClear()) {
+					break;
+				}
+			}
+		}
+	}
+
+	std::cout << "Your matrix: \n";					//Вывод матрицы в понятном виде
+	for (int i = 0; i < n; ++i) {
+		for (int j = 0; j < m; ++j) {
+			std::cout << array[i][j] << "  ";
+		}
+		std::cout << std::endl;
+	}
+
+	int max{ array[0][0] }, temp_i = 0, temp_j = 0;		//Поиск максимального по мудлю значения
+	for (int i = 0; i < n; ++i) {
+		for (int j = 0; j < m; ++j) {
+			if (abs(array[i][j]) > abs(max)) {
+				max = array[i][j];
+				temp_i = i;
+				temp_j = j;
+			}
+		}
+	}
+
+	for (int i = temp_i; i < n - 1; ++i) {			//Смещение строк
+		for (int j = 0; j < m; ++j) {
+			array[i][j] = array[i + 1][j];
+		}
+	}
+
+	for (int i = 0; i < n; ++i) {					//Смещение столбцов
+		for (int j = temp_j; j < m-1; ++j) {
+			array[i][j] = array[i][j + 1];
+		}
+	}
+
+	std::cout << "New matrix: \n";					//Вывод новой матрицы
+	for (int i = 0; i < n - 1; ++i) {
+		for (int j = 0; j < m - 1; ++j) {
+			std::cout << array[i][j] << "  ";
+		}
+		std::cout << std::endl;
+	}
+
+	for (int i = 0; i < n; ++i) {		//Освобождение памяти
+		delete[]array[i];
+	}
+	delete[]array;
+
+	system("pause");
+	return 0;
+}*/
